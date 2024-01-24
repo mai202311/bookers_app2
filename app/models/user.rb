@@ -5,7 +5,6 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
          
   has_many :book, dependent: :destroy #1対Nの関係性
-  
   has_one_attached :profile_image
   
   def get_profile_image(width, height)
@@ -14,5 +13,9 @@ class User < ApplicationRecord
     profile_image.attach(io: File.open(file_path), filename: 'default-image.jpg', content_type: 'image/jpeg')
   end
   profile_image.variant(resize_to_limit: [width, height]).processed
+  end
+  
+  def user_name
+    
   end
 end
