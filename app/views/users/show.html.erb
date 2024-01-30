@@ -8,16 +8,18 @@
         <tbody>
           <tr>
             <th>name</th>
-            <th><%= current_user.name %></th>
+            <th><%= @user.name %></th>
           </tr>
           <tr>
             <th>introduction</th>
-            <th><%= current_user.introduction %></th>
+            <th><%= @user.introduction %></th>
           </tr>
         </tbody>
       </table>
+      <% if @user == current_user %>
       <%= link_to edit_user_path(@user), class: "btn btn-outline-secondary btn-block" do %>
         <i class="fas fa-user-cog"></i>
+      <% end %>
       <% end %>
       <h2 class="col">New book</h2>
       <div class="form-group">
