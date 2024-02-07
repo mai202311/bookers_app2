@@ -1,23 +1,19 @@
-<%= render 'books/index' %>
-      <%= link_to edit_user_path(@user), class: "btn btn-outline-secondary btn-block" do %>
-        <i class="fas fa-user-cog"></i>
-      <% end %>
-      <h2 class="col">New book</h2>
-      <div class="form-group">
-        <%= form_with model: Book.new do |f| %>
-          <label for="book_title">Title</label></br>
-          <%= f.text_field :title %>
-      </div>
-      <div class="form-group">
-          <label for="book_opinion">Opinion</label>
-          <%= f.text_area :body %>
-      </div>
-      <div class="form-group">
-          <%= f.submit 'Create Book' %>
+<div class="container">
+  <div class="row">
+    <div class="col-md-3">
+      <% if @book.errors.any? %>
+      <%= @book.errors.count %>件のエラーが発生しました
+        <ul>
+          <% @book.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+          <% end %>
+        </ul>
         <% end %>
-      </div>
+<%= render 'books/list',user: @user %>
+<%= render 'books/new' %>
     </div>
-    <div class="col-md-8">
+    <div class="offset-md-1"></div>
+    <div class="col-sm-8">
       <h2>Users</h2>
       <table class="table table-hover table-inverse">
         <thead>

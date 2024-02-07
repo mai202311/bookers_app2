@@ -2,36 +2,38 @@
   <div class="row">
     <div class="col-sm-12 col-md-8 col-lg-5 px-5 px-sm-0">
       <h2>Sign up</h2>
-      <%= form_with model:@user,url:user_registration_path,method: :post do |f| %>
+      <% if @user.errors.any? %>
+      <%= @user.errors.count %>件のエラーが発生しました
+      <ul>
+        <% @user.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+        <% end %>
+      </ul>
+      <% end %>
+      <%= form_with model: @user, url: user_registration_path, id: 'new_user', class: 'new_user' do |f| %>
         <div class="field">
-          <label for="user_name">Name</label><br>
-          <%= f.text_field :name, autofocus: true, id:"inputName", placeholder:"名前"%>
+          <%= f.label :name, for: "inputName" %><br>
+          <%= f.text_field :name, autofocus: true, id: "inputName", placeholder: "名前" %>
         </div>
         <div class="field">
-          <label for="user_email">Email</label><br>
+          <%= f.label :email, for: "inputEmail" %><br>
           <%= f.email_field :email, autofocus: true, id:"inputEmail", placeholder:"メールアドレス"%>
-  
         </div>
         <div class="field">
-          <label for="user_password">Password</label>
+          <%= f.label :password %>
           <em>(6 characters minimum)</em>
           <br>
          <%= f.password_field :password, autocomplete: "current-password" %>
-  
         </div>
         <div class="field">
-          <label for="user_password_confirmation">Password confirmation</label><br>
+          <%= f.label :password_confirmation %><br>
          <%= f.password_field :password_confirmation %>
         </div>
         <div class="actions">
-          <input type="submit" name="commit" value="Sign up" class="btn btn-sm btn-success" data-disable-with="Sign up"><br>
-         <%= f.submit "Log in" %>
+         <%= f.submit "Sign up", class: "btn btn-success" %>
         </div>
         <% end %>
+        <%= render "devise/shared/links" %>
     </div>
   </div>
 </div>
-
-
-
-

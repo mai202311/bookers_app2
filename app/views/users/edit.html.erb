@@ -2,22 +2,26 @@
   <div class="row">
     <div class="col-sm-12 col-md-8 col-lg-5 px-5 px-sm-0 mx-auto">
   		<h1>User info</h1>
+  		<% if @user.errors.any? %>
+      <%= @user.errors.count %>件のエラーが発生しました
+      <ul>
+        <% @user.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+        <% end %>
+  　　</ul>
+　　　<% end %>
   		<%= form_with model: @user do |f| %>
-  		<div class="form-group">
-  		  <label for="inputName">Name</label></br>
+  		  <div class="form-group">
+  		  <h4>Name</h4>
   		  <%= f.text_field :name, autofocus: true, id:"inputName", placeholder:"Name"%>
-        </div>
-        <div class="form-group">
-          <label for="inputImage">ProfileImage</label></br>
-          <%= f.text_field :opinion, placeholder: "Opinion" %>
         </div>
         <div class="form-group">
         <%= f.file_field :profile_image, placeholder: "Image", accept: "image/*" %>
         </div>
         <div class="form-group">
-           <label for="inputIntroduction">Introduction</label></br>
+           <h4>Introduction<h4>
            <%= f.text_field :introduction, autofocus: true, id:"inputIntroduction", placeholder:"Introduction" %>
-        </div>   
+        </div>
         <div class="form-group">
           <%= f.submit 'Update User' %>
           <% end %>
@@ -25,19 +29,3 @@
     </div>
   </div>
 </div>
-
-
-
-
-  
-  
-  
-  
-  
-  
- 
-  
-  
-  
-  
-<% end %>

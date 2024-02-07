@@ -1,20 +1,24 @@
 class BooksController < ApplicationController
+  before_action :is_matching_login_user, only: [:edit, :update]
   def new
+    @book = Book.new
   end
 
   def index
-     @books = Book.all
-     @user = current_user.id
+    @book = Book.new
+    @books = Book.all
+    @user = current_user
   end
   def create
-    book = Book.new(book_params)
+    @book = Book.new(book_params)
+    @book.user_id = current_user.id
     # 3. データをデータベースに保存するためのsaveメソッド
-    book.user_id = current_user.id #投稿したユーザーを取得
-    if book.save
-       flash[:notice] = "You have created book successfully.。"
-       redirect_to book_path(book.id)
+    if @book.save
+       flash[:notice] = "You have created book successfully."
+       redirect_to book_path(@book.id)
     else
-      flash[:notice] = "error:You failed to post."
+      @user = current_user.id
+      @books = Book.all
       render :index
     end
   end
@@ -25,26 +29,28 @@ class BooksController < ApplicationController
   end
 
   def edit
-    is_matching_login_user
     @book = Book.find(params[:id])
   end
 
   def update
-    if book.update(book_params)
+    @book = Book.find(params[:id])
+    if @book.update(book_params)
        flash[:notice] = "You have updated book successfully."
-       redirect_to book_path(book.id)
+       redirect_to book_path(@book.id)
     else
-       flash[:alert] = "You failed to destroy."
-       render :edit
+      @errors = @book.errors.full_messages  # エラーメッセージを取得
+      flash[:alert] = "Failed to update. Please fix the following errors: #{@errors}"
+      render :edit
     end
   end
 
   def destroy
     @book = Book.find(params[:id])
     if @book.destroy  # 削除
-       redirect_to '/books'  # 投稿一覧画面へリダイレクト
+       flash[:notice] = "You have destroy book successfully."
+       redirect_to books_path  # 投稿一覧画面へリダイレクト
     else
-      flash[:alert] = "You failed to post."
+      flash[:alert] = "You failed to post destroy."
       render :edit
     end
   end
@@ -53,5 +59,12 @@ class BooksController < ApplicationController
   # ストロングパラメータ
   def book_params
     params.require(:book).permit(:title, :body)
+  end
+
+  def is_matching_login_user
+    @book = Book.find(params[:id])
+  unless @book.user.id == current_user.id
+    redirect_to books_path
+  end
   end
 end
